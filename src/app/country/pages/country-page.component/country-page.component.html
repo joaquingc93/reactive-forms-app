@@ -8,10 +8,13 @@
       <label class="form-label">Continente:</label>
       <select formControlName="region" class="form-control">
         <option value="">-- Seleccione Continente --</option>
+        @for (region of regions(); track region) {
+
+          <option [value]="region">
+            {{ region }}
+          </option>
+        }
         
-        <!-- <option [value]="region">
-          {{ region }}
-        </option> -->
         
       </select>
     </div>
@@ -24,10 +27,13 @@
       <label class="form-label">País:</label>
       <select formControlName="country" class="form-control">
         <option value="">-- Seleccione País --</option>
+        @for(country of countriesByRegion(); track country.cca3) {
+          <option [value]="country.cca3">
+            {{ country.name }}
+          </option>
 
-        <!-- <option [value]="country.cca3">
-          {{ country.name }}
-        </option> -->
+        }
+
 
       </select>
     </div>
@@ -41,11 +47,13 @@
       <label class="form-label">Fronteras:</label>
       <select formControlName="border" class="form-control">
         <option value="">-- Seleccione la frontera --</option>
+        @for(border of borders(); track border.cca3) {
+          <option [value]="border.cca3">
+            {{ border.name }}
+          </option>
+        }
 
 
-        <!-- <option [value]="country.cca3">
-          {{ country.name }}
-        </option> -->
       </select>
     </div>
   </div>
@@ -54,6 +62,6 @@
 
 <h3>Formulario</h3>
 <code>
-  <!-- {{ 'myForm.value' | json }} -->
+  {{ 'myForm.value' | json }}
 </code>
 <p>is form valid: {{ 'myForm.valid' }}</p>

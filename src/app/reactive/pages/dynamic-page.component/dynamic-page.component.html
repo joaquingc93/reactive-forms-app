@@ -1,17 +1,22 @@
 <h2>Reactivos: <small> Dinámicos </small></h2>
 <hr>
 
-<form autocomplete="off">
+<form autocomplete="off" [formGroup]="myForm">
 
     <!-- Nombre -->
     <div class="mb-3 row">
         <label class="col-sm-3 col-form-label">Nombre</label>
         <div class="col-sm-9">
             <input class="form-control"
-                   placeholder="Nombre de la persona">
-            <span class="form-text text-danger">
-                   error message
-            </span>
+                   placeholder="Nombre de la persona"
+                   formControlName="name">
+
+            @if(validatorService.isValidField(myForm, 'name'))  {
+
+                <span class="form-text text-danger">
+                    {{validatorService.getFieldError(myForm, 'name')}}
+                </span>
+            }     
         </div>
     </div>
 
@@ -22,11 +27,15 @@
 
             <div class="input-group">
                 <input class="form-control"
-                       placeholder="Agregar favorito">
+                       placeholder="Agregar favorito"
+                       [formControl]="favoriteGameControl"
+                       (keydown.enter)="onAddFavoriteGame()"
+                       (keydown.enter)="$event.preventDefault()">
 
 
                 <button class="btn btn-outline-primary"
-                        type="button">
+                        type="button"
+                        (click)="onAddFavoriteGame()">
                     Agregar favorito
                 </button>
             </div>
@@ -37,26 +46,43 @@
     <!-- Lista de Juegos Favoritos -->
     <div class="mb-3 row">
         <label class="col-sm-3 col-form-label">Favoritos</label>
-        <div class="col-sm-9">
+        <div class="col-sm-9" formArrayName="favoriteGames">
 
-            <div class="mb-1">
+            @for (favoriteGame of favoriteGames.controls; track $index;let i=$index) {
 
-                <div class="input-group">
-                    <input class="form-control">
+                
+                <div class="mb-1">
+                    
+                    <div class="input-group">
+                        <input class="form-control" [formControlName]="i">
+                        
+                        <button class="btn btn-outline-danger"
+                            type="button"
+                            (click)="onRemoveFavoriteGame(i)">
+                            Eliminar
+                        </button>
+                    </div>
+                    @if(validatorService.isValidFieldInArray(favoriteGames, i)){
 
-                    <button class="btn btn-outline-danger"
-                            type="button">
-                      Eliminar
-                  </button>
+                        <span class="form-text text-danger">
+                        {{validatorService.getFieldErrorInArray(favoriteGames, i)}}
+                        </span>
+            }
+                
                 </div>
-                <span class="form-text text-danger">
-                   Este campo es requerido
-                </span>
+        }
+          @if(validatorService.isValidField(myForm, 'favoriteGames'))
+          {
+            <span class="form-text text-danger">
+              Debe tener al menos 2 juegos favoritos
+            </span>
+          }
 
-            </div>
 
         </div>
     </div>
+
+  
 
 
 
